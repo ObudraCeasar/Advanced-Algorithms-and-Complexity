@@ -1,0 +1,53 @@
+#Implementation of BFS Algorithm in Python
+# Import deque from collections module
+from collections import deque
+
+# Define a class named Graph
+class Graph:
+    # Initialize the Graph object
+    def __init__(self, v):
+        self.V = v  # Number of vertices
+        self.adj = [deque() for _ in range(v)]  # Adjacency list for each vertex
+
+    # Function to add an edge to the graph
+    def add_edge(self, v, w):
+        self.adj[v].append(w)  # Add w to v’s list
+
+    # Function to implement BFS traversal
+    def bfs(self, s):
+        visited = [False] * self.V  # Mark all vertices as not visited
+        queue = deque()  # Create a queue for BFS
+
+        # Mark the source node as visited and enqueue it
+        visited[s] = True
+        queue.append(s)
+
+        while queue:
+            # Dequeue a vertex from queue and print it
+            s = queue.popleft()
+            print(s, end=" ")
+
+            # Get all adjacent vertices of the dequeued vertex s
+            # If an adjacent has not been visited, then mark it visited and enqueue it
+            for n in self.adj[s]:
+                if not visited[n]:
+                    visited[n] = True
+                    queue.append(n)
+
+# Driver code
+if __name__ == "__main__":
+    # Create a graph
+    graph = Graph(7)
+
+    # Add edges to the graph
+    graph.add_edge(0, 7)
+    graph.add_edge(0, 2)
+    graph.add_edge(1, 3)
+    graph.add_edge(1, 4)
+    graph.add_edge(2, 5)
+    graph.add_edge(2, 1)
+    graph.add_edge(3, 6)
+
+    # Print the BFS traversal
+    print("Following is Breadth First Traversal (starting from vertex 2):")
+    graph.bfs(2)  # Start BFS traversal from vertex 2
