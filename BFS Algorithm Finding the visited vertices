@@ -1,0 +1,55 @@
+# Import deque from collections module
+from collections import deque
+
+# Define a function to find the shortest path using BFS
+def bfs_shortest_path(graph, origin, target):
+    # Initialize a queue with the origin node and its path
+    queue = [(origin, [origin])]
+    # Initialize a set to keep track of visited nodes
+    visited = set([origin])
+
+    # Continue until the queue is empty
+    while queue:
+        # Dequeue a node and its path from the queue
+        current, path = queue.pop(0)
+        # Print the current node
+        print(f"Current node: {current}")
+
+        # If the current node is the target, return the path
+        if current == target:
+            return path
+
+        # Get the neighbors of the current node
+        neighbors = graph.get(current, [])
+        # Iterate over the neighbors
+        for neighbor in neighbors:
+            # If a neighbor has not been visited
+            if neighbor not in visited:
+                # Print the visited neighbor
+                print(f"Visited neighbor {neighbor}")
+                # Mark the neighbor as visited
+                visited.add(neighbor)
+                # Enqueue the neighbor and its path
+                queue.append((neighbor, path + [neighbor]))
+
+    # If no path is found, return None
+    return None
+
+# Define a graph
+graph = {
+    1: [2, 3],
+    2: [4, 5],
+    3: [5, 6],
+    4: [6],
+    5: [6],
+    6: []
+}
+
+# Find the shortest path from 1 to 6 using BFS
+path = bfs_shortest_path(graph, origin=1, target=6)
+# If a path is found, print it
+if path:
+    print(f"BFS shortest path: {path}\n")
+# If no path is found, print a message
+else:
+    print("No path found.\n")
