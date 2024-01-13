@@ -1,0 +1,53 @@
+#Cheapest route using DFS
+# Define the function to find the cheapest route using DFS
+def dfs_cheapest_route(routes, origin, target, additional_cost=0, visited=None, current_route=None, cheapest_route=None, current_cost=0, cheapest_cost=float('inf')):
+    # Initialize variables
+    if visited is None:
+        visited = set()
+    if current_route is None:
+        current_route = []
+    if cheapest_route is None:
+        cheapest_route = []
+
+    # Track current route & cost
+    visited.add(origin)
+    current_route.append(origin)
+    current_cost += additional_cost
+
+    print(f"Current city: {origin}")
+
+    if origin == target:
+        # Arrived at destination
+        if current_cost < cheapest_cost:
+            cheapest_cost = current_cost
+            cheapest_route = list(current_route)
+    else:
+        # Get neighbor cities
+        if origin in routes:
+            for neighbor, cost in routes[origin].items():
+                if neighbor not in visited:
+                    # Do recursion
+                    _, cheapest_route, cheapest_cost = dfs_cheapest_route(routes, neighbor, target, cost, visited, current_route, cheapest_route, current_cost, cheapest_cost)
+
+    # Reset current route & cost
+    visited.remove(origin)
+    current_route.pop()
+    current_cost -= additional_cost
+
+    return visited, cheapest_route, cheapest_cost
+
+# Define the routes
+routes = {
+    "A": {"B": 1000, "C": 200, "D": 500},
+    "B": {"C": 700, "D": 800, "E": 750},
+    "C": {"E": 1200, "F": 400, "G": 500},
+    "D": {"E": 800, "F": 700, "G": 450},
+    "E": {"F": 600, "G": 900, "H": 1100},
+    "F": {"E": 600, "G": 600, "H": 950},
+    "G": {"F": 600, "H": 300},
+    "H": {"G": 300},
+}
+
+# Call the function and print the result
+_, cheapest_route, cheapest_cost = dfs_cheapest_route(routes, "A", "H")
+print(f"DFS cheapest cost: {cheapest_cost}, using route: {cheapest_route}\n")
