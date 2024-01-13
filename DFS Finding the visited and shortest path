@@ -1,0 +1,50 @@
+# Define the function to find the shortest path with DFS
+def dfs_shortest_path(graph, origin, target, visited=None, path=None, shortest_path=None):
+    # Initialize visited set, path list, and shortest_path list
+    if visited is None:
+        visited = set()
+    if path is None:
+        path = []
+    if shortest_path is None:
+        shortest_path = [None]
+
+    # Track current path
+    visited.add(origin)
+    path.append(origin)
+
+    print(f"Current node: {origin}")
+
+    if origin == target:
+        # Arrived at destination
+        if shortest_path[0] is None or len(path) < len(shortest_path[0]):
+            shortest_path[0] = list(path)
+    else:
+        # Get neighbor nodes
+        if origin in graph:
+            for neighbor in graph[origin]:
+                if neighbor not in visited:
+                    # Do recursion
+                    dfs_shortest_path(graph, neighbor, target, visited, path, shortest_path)
+
+    # Reset current path
+    visited.remove(origin)
+    path.pop()
+
+    return shortest_path[0]
+
+# Example usage
+graph = {
+    1: [2, 3],
+    2: [4, 5],
+    3: [5, 6],
+    4: [6],
+    5: [6],
+    6: []
+}
+
+shortest_path = dfs_shortest_path(graph, 1, 6)
+
+if shortest_path:
+    print(f"DFS shortest path: {shortest_path}\n")
+else:
+    print("No path found.\n")
