@@ -1,0 +1,55 @@
+#BFS (Breadth-first Search)
+#With BFS, we first examine all nodes at the same level before moving to the next, 
+#and ignore the nodes that has been visited. But this time, we consider the gas cost to determine the best route.
+# Define the function to find all paths with DFS
+#All Possible Paths with their weights sorted by their wights
+def find_all_paths(graph, start, end, path=[], weight=0):
+    # Add the start node to the path
+    path = path + [start]
+
+    # If the start node is not the end node, add the weight of the edge
+    if len(path) > 1:
+        weight += graph[path[-2]][start]
+
+    # If the start node is the end node, return the path and weight
+    if start == end:
+        return [(path, weight)]
+
+    # If the start node is not in the graph, return an empty list
+    if start not in graph:
+        return []
+
+    paths = []
+    # For each neighbor of the start node, find all paths
+    for node in graph[start]:
+        if node not in path:
+            newpaths = find_all_paths(graph, node, end, path, weight)
+            for newpath in newpaths:
+                paths.append(newpath)
+
+    return paths
+
+# Define the routes
+routes = {
+    "A": {"B": 1000, "C": 200, "D": 500},
+    "B": {"C": 700, "D": 800, "E": 750},
+    "C": {"E": 1200, "F": 400, "G": 500},
+    "D": {"E": 800, "F": 700, "G": 450},
+    "E": {"F": 600, "G": 900, "H": 1100},
+    "F": {"E": 600, "G": 600, "H": 950},
+    "G": {"F": 600, "H": 300},
+    "H": {"G": 300},
+}
+
+# Call the function and print the result
+all_paths = find_all_paths(routes, "A", "H")
+#for path, weight in all_paths:
+    #print(f"Path: {path} with total weight: {weight}")
+# Call the function and print the result
+#all_paths = find_all_paths(routes, "A", "H")
+
+# Sort the paths by their weights in ascending order
+all_paths_sorted = sorted(all_paths, key=lambda x: x[1])
+
+for path, weight in all_paths_sorted:
+    print(f"Path: {path} with total weight: {weight}")
